@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\LaduController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SisestamineController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -35,7 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('ladus', LaduController::class);
+    Route::resource('ladu', LaduController::class);
+    Route::resource('sisestamine', SisestamineController::class);
     
 });
 

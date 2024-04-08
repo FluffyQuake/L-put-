@@ -8,9 +8,10 @@ use Inertia\Inertia;
 
 class LaduController extends Controller
 {
-    public function index(){
-        return Inertia::render('Ladus', [
-            'ladus' => Ladu::all(),
+    public function index()
+    {
+        return Inertia::render('Ladu/Index', [
+            'ladu' => Ladu::all(),
         ]);
     }
 }

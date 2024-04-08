@@ -7,12 +7,10 @@ defineProps({
     products: Object
 })
 
-const url = window.location.origin;
-
 </script>
 
 <template>
-    <Head title="Ladu" />
+    <Head title="Dashboard" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -26,5 +24,6 @@ const url = window.location.origin;
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+
+</AuthenticatedLayout>
 </template>
