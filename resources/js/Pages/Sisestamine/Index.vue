@@ -34,32 +34,32 @@ function submit() {
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="serial_number">
                         Serial number
                     </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="serial_number" type="text" placeholder="S/N">
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="device">
-                        Seade
-                    </label>
-                    <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="device" type="text" placeholder="Vali seade">
+                    <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="serial_number" type="text" placeholder="S/N" v-model="serialnumber" required>
                     <p class="text-red-500 text-xs italic">Kohustuslik.</p>
                 </div>
 
-                <div class="mb-6">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="device">
+                        Seade
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="device" type="text" placeholder="Vali seade">
+                </div>
+
+                <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="model">
                         Mudel
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="model" type="text" placeholder="Vali mudel">
                 </div>
 
-                <div class="mb-6">
+                <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
                         Kirjeldus
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" type="text" placeholder="Kirjelda toodet">
                 </div>
                 
-                <div class="inline-block relative w-64 mb-6">
+                <div class="inline-block relative w-64 mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="condition">
                         Seisukord
                     </label>
@@ -75,7 +75,7 @@ function submit() {
                     </div>
                 </div>
 
-                <div class="inline-block relative w-64 mb-6">
+                <div class="inline-block relative w-64 mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="shelf">
                         Riiul
                     </label>
@@ -91,7 +91,7 @@ function submit() {
                     </div>
                 </div>
 
-                <div class="mb-6">
+                <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="shop">
                         Kauplus
                     </label>

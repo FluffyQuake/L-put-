@@ -32,9 +32,9 @@ class SisestamineController extends Controller
     public function store(Request $request)
     {
         Sisestamine::create($request->validate([
-            'first_name' => ['required', 'max:50'],
-            'last_name' => ['required', 'max:50'],        
-            'email' => ['required', 'max:50', 'email'],        
+            '' => ['required', 'max:50'],
+            '' => ['max:50'],        
+            '' => ['max:50'],        
         ]));
 
         return to_route('ladu.index');

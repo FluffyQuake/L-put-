@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sisestamines', function (Blueprint $table) {
+        Schema::create('sisestamine', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('SN');
+            $table->string('seade');
+            $table->string('mudel');
+            $table->string('kirjeldus');
+            $table->string('seisukord');
+            $table->string('riiul');
+            $table->string('kauplus');
         });
     }
 
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sisestamines');
+        //
     }
 };
