@@ -9,5 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 class Ladu extends Model
 
 {
+    public $table = 'ladu';
     use HasFactory;
 }
