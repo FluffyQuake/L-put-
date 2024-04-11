@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('seisukord');
             $table->string('riiul');
             $table->string('kauplus');
+            $table->string('image_path');
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('sisestamine');
     }
 };
