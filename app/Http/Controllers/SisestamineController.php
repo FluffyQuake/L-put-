@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Sisestamine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class SisestamineController extends Controller
+class SisestamineController extends Controller  
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia:: render('Sisestamine/Index', [
+        return Inertia::render('Sisestamine/Index', [
             'sisestamine' => Sisestamine::all(),
         ]);
     }
@@ -31,13 +33,32 @@ class SisestamineController extends Controller
      */
     public function store(Request $request)
     {
-        Sisestamine::create($request->validate([
-            'first_name' => ['required', 'max:50'],
-            'last_name' => ['required', 'max:50'],        
-            'email' => ['required', 'max:50', 'email'],        
-        ]));
+        $request->validate([
+            'SN' => 'required',
+            'seade' => 'required',
+            'mudel' => 'required',
+            'kirjeldus' => 'required',
+            'seisukord' => 'required',
+            'riiul' => 'required',
+            'kauplus' => 'required',
+            'image_path' => 'required|image',
 
-        return to_route('ladu.index');
+        ]);
+
+        $path = Storage::putFile('sisestamine', $request->file('image_path'));
+
+        Sisestamine::create([
+            'SN' => $request['SN'],
+            'seade' => $request['seade'],
+            'mudel' => $request['mudel'],
+            'kirjeldus' => $request['kirjeldus'],
+            'seisukord' => $request['seisukord'],
+            'riiul' => $request['riiul'],
+            'kauplus' => $request['kauplus'],
+            'image_path' => $path,
+        ]);
+
+        return redirect()->route('ladu.index');
     }
 
     /**
@@ -53,7 +74,10 @@ class SisestamineController extends Controller
      */
     public function edit(Sisestamine $sisestamine)
     {
-        //
+        return Inertia::render('ladu.edit', [
+            'ladu' => $sisestamine,
+            ''
+        ]);
     }
 
     /**
