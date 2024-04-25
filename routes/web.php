@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\LaduController;
+use App\Http\Controllers\MudelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SisestamineController;
+use App\Models\Ladu;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
@@ -38,9 +41,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('ladu', LaduController::class);
-    Route::resource('sisestamine', SisestamineController::class);
+
+    Route::resource('ladu', LaduController::class)->withTrashed()->except('update');
+    Route::post('sisestamine', [SisestamineController::class, 'store'])->name('sisestamine.store');
+    // Route::post('ladu/update/{ladu}', [LaduController::class, 'update'])->name('ladu.update');
     
+    Route::resource('sisestamine', SisestamineController::class);
+    Route::resource('device', DeviceController::class);
+    Route::resource('mudel', MudelController::class);
+
 });
 
 
