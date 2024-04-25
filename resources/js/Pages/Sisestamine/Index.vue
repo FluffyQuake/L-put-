@@ -1,16 +1,22 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 
 import { reactive } from 'vue'
 import { router } from '@inertiajs/vue3'
 import axios from 'axios';
+
+const form = reactive({
+    first_name: null,
+    last_name: null,
+    email: null,
+})
+
+function submit() {
+    form.post(route('ladu.index'))
 }
 
-// const createUser = () => {
-//     axios.post('/api/users', form)
-// }
 
 </script>
 
@@ -21,8 +27,11 @@ import axios from 'axios';
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Ladu sisse</h2>
         </template>
-        
+
+
         <div class="w-full max-w-lg mt-10">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="saveData()">
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="SN">
                         Serial number
@@ -35,12 +44,14 @@ import axios from 'axios';
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="device">
                         Seade
                     </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="device" type="text" placeholder="Vali seade" v-model="sisestamine.seade">
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="mudel">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="model">
                         Mudel
                     </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="model" type="text" placeholder="Vali mudel" v-model="sisestamine.mudel">
                 </div>
 
                 <div class="mb-4">
@@ -54,6 +65,7 @@ import axios from 'axios';
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="condition">
                         Seisukord
                     </label>
+                    <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="sisestamine.seisukord">
                         <option>Laos</option>
                         <option>Objektil</option>
                         <option>Parandada</option>
@@ -69,6 +81,7 @@ import axios from 'axios';
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="shelf">
                         Riiul
                     </label>
+                    <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="sisestamine.riiul">
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -84,6 +97,7 @@ import axios from 'axios';
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="shop">
                         Kauplus
                     </label>
+                    <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="sisestamine.kauplus">
                         <optgroup label="Konsumid">
 						<option value="Kaubaait">Kaubaait</option>
 							<option value="Kummeli Konsum">Kummeli Konsum</option> 						
@@ -128,14 +142,10 @@ import axios from 'axios';
                     </div>
                 </div>
 
-                <input 
-                    class="mb-5 mt-3"
-                    type="file" 
-                    @input="form.image = $event.target.files[0]"
-                />
-
                 <div class="flex items-center justify-around">
-
+                    <button class="btn bnt-primary" type="submit">
+                        SISESTA
+                    </button>   
                 </div>
 
             </form>

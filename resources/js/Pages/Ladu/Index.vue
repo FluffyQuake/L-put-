@@ -25,17 +25,29 @@ defineProps({
             </div>
         </div>
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div v-for="ladu in ladus" class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 font-bold">{{ ladu.title }}</div>
-                    <div class="flex gap-4">
-                        <Link :href="route('ladu.edit', {ladu})">Edit</Link>
-                        <Link class="text-red-500" :href="route('ladu.destroy', {ladu})" method="delete" as="button" type="button">Delete</Link>
-                    </div>
-                </div>
-            </div>
+            
         </div>
         
 
 </AuthenticatedLayout>
 </template>
+
+<script>
+    export default {
+    data() {
+        return {
+            'ladu': {
+                'SN':'',
+                'seade':'',
+                'mudel':'',
+                'kirjeldus':'',
+                'seisukord':'',
+                'riiul':'',
+                'kauplus':'',
+            }
+        };
+
+    },
+
+};
+</script>
