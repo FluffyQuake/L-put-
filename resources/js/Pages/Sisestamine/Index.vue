@@ -1,29 +1,22 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 
 import { reactive } from 'vue'
 import { router } from '@inertiajs/vue3'
 import axios from 'axios';
 
-const form = useForm({
-    SN: '',
-    device: '',
-    mudel: '',
-    description: '',
-    condition: '',
-    shelf: '',
-    shop: '',
-});
+const form = reactive({
+    first_name: null,
+    last_name: null,
+    email: null,
+})
 
-const submit = () => {
-    form.post(route('sisestamine.store'))
+function submit() {
+    form.post(route('ladu.index'))
 }
 
-// const createUser = () => {
-//     axios.post('/api/users', form)
-// }
 
 </script>
 
@@ -34,15 +27,16 @@ const submit = () => {
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Ladu sisse</h2>
         </template>
-        
+
+
         <div class="w-full max-w-lg mt-10">
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
-                <!-- @submit.prevent="form.post(route('ladu.index'))" -->
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="saveData()">
+
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="SN">
                         Serial number
                     </label>
-                    <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="SN" type="text" placeholder="S/N" v-model="SN" required>
+                    <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="SN" type="text" placeholder="S/N" v-model="sisestamine.SN" required>
                     <p class="text-red-500 text-xs italic">Kohustuslik.</p>
                 </div>
 
@@ -50,46 +44,28 @@ const submit = () => {
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="device">
                         Seade
                     </label>
-
-                    <select 
-                        class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 mb-2 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" 
-                        v-model="form.device" 
-                        id="device"
-                        >
-                        <option>AAAAAAAAAAAAA</option>
-                        <!-- <option v-for="(device, key) in data.device" :value="device.id">{{ device.name }}</option>  -->
-
-                    </select>
-                    <button type="button" data-toggle="modal" data-target="#createUserModal" class="btn btn-primary bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Lisa seade
-                    </button>
-
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"></div>
-            
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="device" type="text" placeholder="Vali seade" v-model="sisestamine.seade">
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="mudel">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="model">
                         Mudel
                     </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-2 leading-tight focus:outline-none focus:shadow-outline" id="mudel" type="text" placeholder="Vali mudel">
-                    <Link  :href="route('mudel.index')" as="button" type="button" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Lisa mudel
-                    </Link>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="model" type="text" placeholder="Vali mudel" v-model="sisestamine.mudel">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
                         Kirjeldus
                     </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" type="text" placeholder="Kirjelda toodet">
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" type="text" placeholder="Kirjelda toodet" v-model="sisestamine.kirjeldus">
                 </div>
                 
                 <div class="inline-block relative w-64 mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="condition">
                         Seisukord
                     </label>
-                    <select id="condition" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                    <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="sisestamine.seisukord">
                         <option>Laos</option>
                         <option>Objektil</option>
                         <option>Parandada</option>
@@ -105,7 +81,7 @@ const submit = () => {
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="shelf">
                         Riiul
                     </label>
-                    <select id="shelf" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                    <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="sisestamine.riiul">
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -121,7 +97,7 @@ const submit = () => {
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="shop">
                         Kauplus
                     </label>
-                    <select id="shop" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                    <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="sisestamine.kauplus">
                         <optgroup label="Konsumid">
 						<option value="Kaubaait">Kaubaait</option>
 							<option value="Kummeli Konsum">Kummeli Konsum</option> 						
@@ -166,14 +142,10 @@ const submit = () => {
                     </div>
                 </div>
 
-                <input 
-                    class="mb-5 mt-3"
-                    type="file" 
-                    @input="form.image = $event.target.files[0]"
-                />
-
                 <div class="flex items-center justify-around">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sisesta</button>   
+                    <button class="btn bnt-primary" type="submit">
+                        SISESTA
+                    </button>   
                 </div>
 
             </form>
@@ -182,4 +154,33 @@ const submit = () => {
     </AuthenticatedLayout>
 </template>
 
-a
+<script>
+export default {
+    data() {
+        return {
+            'sisestamine': {
+                'SN':'',
+                'seade':'',
+                'mudel':'',
+                'kirjeldus':'',
+                'seisukord':'',
+                'riiul':'',
+                'kauplus':'',
+            }
+        };
+
+    },
+
+    methods: {
+        saveData() {
+            axios.post('/sisestamine/create', this.sisestamine).then(
+                response => {
+                    console.log(response)
+                }
+            ). catch(error => {
+                console.log('Error here')
+            })
+        }
+    }
+};
+</script>
