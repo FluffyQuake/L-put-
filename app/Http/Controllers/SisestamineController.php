@@ -34,43 +34,6 @@ class SisestamineController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $validated = $request->validate([
-            'SN' => 'required|max:25',
-            'device' => 'required',
-            'mudel' => 'required',
-            'description' => 'required',
-            'condition' => 'required',
-            'shelf' => 'required',
-            'shop' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
-        ]);
-
-        
-        $SN = $request->input('SN');
-        $device = $request->input('device');
-        $mudel = $request->input('mudel');
-        $description = $request->input('description');
-        $condition = $request->input('condition');
-        $shelf = $request->input('shelf');
-        $shop = $request->input('shop');
-        $image = Storage::putFile('sisestamine', $request->file('image'));
-
-        // dd($image);
-
-        Sisestamine::create([
-            'SN' => $SN,
-            'device' => $device,
-            'mudel' => $mudel,
-            'description' => $description,
-            'condition' => $condition,
-            'shelf' => $shelf,
-            'shop' => $shop,
-            'image_path' => $image,
-        ]);
-
-        return redirect()->route('ladu.index');
-
     }
 
     /**
