@@ -43,5 +43,8 @@ Route::middleware('auth')->group(function () {
     
 });
 
+Route::post('/ladu-insert', [FormController::class, 'store']);
+
+Route::post('/sisestamine/create', [SisestamineController::class, 'store']);
 
 require __DIR__.'/auth.php';

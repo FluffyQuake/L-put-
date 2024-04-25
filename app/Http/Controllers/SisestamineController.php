@@ -33,32 +33,12 @@ class SisestamineController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'SN' => 'required',
-            'seade' => 'required',
-            'mudel' => 'required',
-            'kirjeldus' => 'required',
-            'seisukord' => 'required',
-            'riiul' => 'required',
-            'kauplus' => 'required',
-            'image_path' => 'required|image',
-
-        ]);
-
-        $path = Storage::putFile('sisestamine', $request->file('image_path'));
-
-        Sisestamine::create([
-            'SN' => $request['SN'],
-            'seade' => $request['seade'],
-            'mudel' => $request['mudel'],
-            'kirjeldus' => $request['kirjeldus'],
-            'seisukord' => $request['seisukord'],
-            'riiul' => $request['riiul'],
-            'kauplus' => $request['kauplus'],
-            'image_path' => $path,
-        ]);
-
-        return redirect()->route('ladu.index');
+        $data = $request->all();
+        $response = Sisestamine::create($data);
+        return response()->json([
+            'status' => 'success',
+            'data' => $response
+        ], 200);
     }
 
     /**
