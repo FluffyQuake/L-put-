@@ -60,9 +60,9 @@ const submit = () => {
                         <!-- <option v-for="(device, key) in data.device" :value="device.id">{{ device.name }}</option>  -->
 
                     </select>
-                    <button type="button" data-toggle="modal" data-target="#createUserModal" class="btn btn-primary bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    <Link :href="route('device')" type="button" as="button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Lisa seade
-                    </button>
+                    </Link>
 
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"></div>
             
