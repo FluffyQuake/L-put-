@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ladu;
 use App\Models\Sisestamine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -33,32 +34,43 @@ class SisestamineController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'SN' => 'required',
-            'seade' => 'required',
+        
+        $validated = $request->validate([
+            'SN' => 'required|max:25',
+            'device' => 'required',
             'mudel' => 'required',
-            'kirjeldus' => 'required',
-            'seisukord' => 'required',
-            'riiul' => 'required',
-            'kauplus' => 'required',
-            'image_path' => 'required|image',
-
+            'description' => 'required',
+            'condition' => 'required',
+            'shelf' => 'required',
+            'shop' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
         ]);
 
-        $path = Storage::putFile('sisestamine', $request->file('image_path'));
+        
+        $SN = $request->input('SN');
+        $device = $request->input('device');
+        $mudel = $request->input('mudel');
+        $description = $request->input('description');
+        $condition = $request->input('condition');
+        $shelf = $request->input('shelf');
+        $shop = $request->input('shop');
+        $image = Storage::putFile('sisestamine', $request->file('image'));
+
+        // dd($image);
 
         Sisestamine::create([
-            'SN' => $request['SN'],
-            'seade' => $request['seade'],
-            'mudel' => $request['mudel'],
-            'kirjeldus' => $request['kirjeldus'],
-            'seisukord' => $request['seisukord'],
-            'riiul' => $request['riiul'],
-            'kauplus' => $request['kauplus'],
-            'image_path' => $path,
+            'SN' => $SN,
+            'device' => $device,
+            'mudel' => $mudel,
+            'description' => $description,
+            'condition' => $condition,
+            'shelf' => $shelf,
+            'shop' => $shop,
+            'image_path' => $image,
         ]);
 
         return redirect()->route('ladu.index');
+
     }
 
     /**
@@ -75,8 +87,8 @@ class SisestamineController extends Controller
     public function edit(Sisestamine $sisestamine)
     {
         return Inertia::render('ladu.edit', [
-            'ladu' => $sisestamine,
-            ''
+            'sisestamine' => $sisestamine,
+            'ladu' => Ladu::all()
         ]);
     }
 
@@ -85,14 +97,42 @@ class SisestamineController extends Controller
      */
     public function update(Request $request, Sisestamine $sisestamine)
     {
-        //
+        $request->validate([
+            'SN' => 'required',
+            'device' => 'required',
+            'mudel' => 'required',
+            'description' => 'required',
+            'condition' => 'required',
+            'shelf' => 'required',
+            'shop' => 'required',
+            'image_path' => 'required|image',
+        ]);
+    
+        Storage::delete($sisestamine->image_path);
+        $path = Storage::putFile('ladu', $request->file('image_path'));
+
+        $sisestamine->update([
+            'SN' => $request['SN'],
+            'device' => $request['device'],
+            'mudel' => $request['mudel'],
+            'description' => $request['description'],
+            'condition' => $request['condition'],
+            'shelf' => $request['shelf'],
+            'shop' => $request['shop'],
+            'image_path' => $path,
+        ]);
+
+    return redirect()->route('ladu.index');   
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Sisestamine $sisestamine)
     {
-        //
+        Storage::delete($sisestamine->image_path);
+        $sisestamine->delete();
+        return redirect()->route('ladu.index');
     }
 }
