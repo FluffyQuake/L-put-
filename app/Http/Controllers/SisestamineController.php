@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ladu;
 use App\Models\Sisestamine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -33,12 +34,6 @@ class SisestamineController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $response = Sisestamine::create($data);
-        return response()->json([
-            'status' => 'success',
-            'data' => $response
-        ], 200);
     }
 
     /**
@@ -55,8 +50,8 @@ class SisestamineController extends Controller
     public function edit(Sisestamine $sisestamine)
     {
         return Inertia::render('ladu.edit', [
-            'ladu' => $sisestamine,
-            ''
+            'sisestamine' => $sisestamine,
+            'ladu' => Ladu::all()
         ]);
     }
 
@@ -65,14 +60,42 @@ class SisestamineController extends Controller
      */
     public function update(Request $request, Sisestamine $sisestamine)
     {
-        //
+        $request->validate([
+            'SN' => 'required',
+            'device' => 'required',
+            'mudel' => 'required',
+            'description' => 'required',
+            'condition' => 'required',
+            'shelf' => 'required',
+            'shop' => 'required',
+            'image_path' => 'required|image',
+        ]);
+    
+        Storage::delete($sisestamine->image_path);
+        $path = Storage::putFile('ladu', $request->file('image_path'));
+
+        $sisestamine->update([
+            'SN' => $request['SN'],
+            'device' => $request['device'],
+            'mudel' => $request['mudel'],
+            'description' => $request['description'],
+            'condition' => $request['condition'],
+            'shelf' => $request['shelf'],
+            'shop' => $request['shop'],
+            'image_path' => $path,
+        ]);
+
+    return redirect()->route('ladu.index');   
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Sisestamine $sisestamine)
     {
-        //
+        Storage::delete($sisestamine->image_path);
+        $sisestamine->delete();
+        return redirect()->route('ladu.index');
     }
 }
