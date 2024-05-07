@@ -9,4 +9,14 @@ class Sisestamine extends Model
 {
     public $table = 'sisestamine';
     use HasFactory;
+
+    protected $fillable= [
+        'SN',
+        'seade',
+        'mudel',
+        'kirjeldus',
+        'seisukord',
+        'riiul',
+        'kauplus',
+    ];
 }
