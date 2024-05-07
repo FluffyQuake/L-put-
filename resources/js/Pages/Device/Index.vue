@@ -10,12 +10,8 @@ import TextInput from '@/Components/TextInput.vue';
 
 const form = useForm({
   title: '',
-  description: '',
-  genre: '',
-  image: '',
 })
 
-const data = defineProps({ genres: Object });
 </script>
 
 <template>
@@ -31,22 +27,23 @@ const data = defineProps({ genres: Object });
                 <div class="flex flex-col">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                         <form @submit.prevent="form.post(route('device'))" class="flex flex-col gap-2">
-                            <!-- <input type="text" v-model="name" id="name" placeholder="Genre's name"> -->
                             <div>
-                                <InputLabel for="name" value="Title" />
+                                <InputLabel for="name" value="New device" />
 
                                 <TextInput
-                                    id="name"
+                                    id="title"
                                     type="text"
                                     class="mt-1 block w-full"
                                     v-model="form.title"
                                     required
                                     autofocus
-                                />
-
-                                <InputError class="mt-2" :message="form.errors.title" />
-                            </div>
-                            
+                                    />
+                                    <span class="text-red-600" v-if="form.errors.title">
+                                        {{ form.errors.title }}
+                                    </span>
+                                    <!-- <InputError class="mt-2" :message="form.errors.title" /> -->
+                                </div>
+                                
                             <button type="submit" :disabled="form.processing" class="w-full h-fit border border-gray-500 py-2">Create new device</button>
                         </form>
                     </div>

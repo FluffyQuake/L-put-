@@ -10,5 +10,6 @@ class Ladu extends Model
 
 {
     public $table = 'ladu';
+    protected $guarded = [];
     use HasFactory;
 }

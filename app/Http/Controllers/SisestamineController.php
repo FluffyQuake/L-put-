@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\Ladu;
+use App\Models\Mudel;
 use App\Models\Sisestamine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -16,8 +19,11 @@ class SisestamineController extends Controller
      */
     public function index()
     {
+        // dd(Mudel::get());
         return Inertia::render('Sisestamine/Index', [
             'sisestamine' => Sisestamine::all(),
+            'devices' => Device::get(),
+            'mudels' => Mudel::get(),
         ]);
     }
 
@@ -35,7 +41,7 @@ class SisestamineController extends Controller
     public function store(Request $request)
     {
         
-        $validated = $request->validate([
+        Validator::make($request->all(), [
             'SN' => 'required|max:25',
             'device' => 'required',
             'mudel' => 'required',
@@ -44,8 +50,8 @@ class SisestamineController extends Controller
             'shelf' => 'required',
             'shop' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
-        ]);
-
+        ])->validate();
+        
         
         $SN = $request->input('SN');
         $device = $request->input('device');
@@ -55,7 +61,14 @@ class SisestamineController extends Controller
         $shelf = $request->input('shelf');
         $shop = $request->input('shop');
         $image = Storage::putFile('sisestamine', $request->file('image'));
-
+        
+        // dd($SN);
+        // dd($device);
+        // dd($mudel);
+        // dd($description);
+        // dd($condition);
+        // dd($shelf);
+        // dd($shop);
         // dd($image);
 
         Sisestamine::create([
