@@ -43,12 +43,20 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('ladu', LaduController::class)->withTrashed()->except('update');
-    Route::post('sisestamine', [SisestamineController::class, 'store'])->name('sisestamine.store');
     // Route::post('ladu/update/{ladu}', [LaduController::class, 'update'])->name('ladu.update');
     
+    Route::post('/device', [DeviceController::class, 'store'])->name('device');
+    Route::get('/device', [DeviceController::class, 'index'])->name('device');
+    // Route::resource('device', DeviceController::class);
+    // Route::get('/device/create', [DeviceController::class, 'create'])->name('device.create');
+    
+    Route::post('sisestamine', [SisestamineController::class, 'store'])->name('sisestamine.store');
     Route::resource('sisestamine', SisestamineController::class);
-    Route::resource('device', DeviceController::class);
-    Route::resource('mudel', MudelController::class);
+    // $sisestamine = DB::table('mudel')->get()->dd();
+    
+    Route::post('/mudel', [MudelController::class, 'store'])->name('mudel');
+    Route::get('/mudel', [MudelController::class, 'index'])->name('mudel');
+    // Route::resource('mudel', MudelController::class);
 
 });
 

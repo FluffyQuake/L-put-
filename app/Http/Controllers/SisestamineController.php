@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\Ladu;
+use App\Models\Mudel;
 use App\Models\Sisestamine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -16,8 +19,11 @@ class SisestamineController extends Controller
      */
     public function index()
     {
+        // dd(Mudel::get());
         return Inertia::render('Sisestamine/Index', [
             'sisestamine' => Sisestamine::all(),
+            'devices' => Device::get(),
+            'mudels' => Mudel::get(),
         ]);
     }
 
@@ -34,6 +40,50 @@ class SisestamineController extends Controller
      */
     public function store(Request $request)
     {
+        
+        Validator::make($request->all(), [
+            'SN' => 'required|max:25',
+            'device' => 'required',
+            'mudel' => 'required',
+            'description' => 'required',
+            'condition' => 'required',
+            'shelf' => 'required',
+            'shop' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
+        ])->validate();
+        
+        
+        $SN = $request->input('SN');
+        $device = $request->input('device');
+        $mudel = $request->input('mudel');
+        $description = $request->input('description');
+        $condition = $request->input('condition');
+        $shelf = $request->input('shelf');
+        $shop = $request->input('shop');
+        $image = Storage::putFile('sisestamine', $request->file('image'));
+        
+        // dd($SN);
+        // dd($device);
+        // dd($mudel);
+        // dd($description);
+        // dd($condition);
+        // dd($shelf);
+        // dd($shop);
+        // dd($image);
+
+        Sisestamine::create([
+            'SN' => $SN,
+            'device' => $device,
+            'mudel' => $mudel,
+            'description' => $description,
+            'condition' => $condition,
+            'shelf' => $shelf,
+            'shop' => $shop,
+            'image_path' => $image,
+        ]);
+
+        return redirect()->route('ladu.index');
+
     }
 
     /**
