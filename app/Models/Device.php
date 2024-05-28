@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Device extends Model
 {
     use HasFactory;
-    public $table = 'device';
     protected $guarded = [];
+    public $table = 'device';
 
-    public function mudel(): BelongsTo
+    public function mudel(): HasMany
     {
-        return $this->belongsTo(Mudel::class);
+        return $this->hasMany(Mudel::class);
     }
 }

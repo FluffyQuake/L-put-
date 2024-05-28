@@ -15,16 +15,15 @@ return new class extends Migration
     {
         Schema::create('sisestamine', function (Blueprint $table) {
             $table->id();
-            // $table->foreignIdFor(Device::class);
-            // $table->foreignIdFor(Mudel::class);
             $table->string('SN');
-            $table->string('device');
-            $table->string('mudel');
+            $table->foreignIdFor(Device::class);
+            $table->foreignIdFor(Mudel::class);
             $table->text('description');
             $table->string('condition');
             $table->string('shelf');
             $table->string('shop');
             $table->string('image_path');
+            $table->timestamps();
         });
     }
 

@@ -2,29 +2,34 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 import { reactive } from 'vue'
+import { computed } from 'vue';
 
 const form = useForm({
     SN: '',
-    device: '',
-    mudel: '',
+    device_id: '',
+    mudel_id: '',
     description: '',
     condition: '',
     shelf: '',
     shop: '',
+    image: ''
 });
 
-defineProps({
+const props = defineProps({
     devices: Object,
     mudels: Object
 })
+
+console.log(props.mudels)
+
+const fMudels = computed(() => props.mudels.filter(mudel => mudel.device_id === form.device_id))
+
 // const props = defineProps({ devices: Object });
 // const props = defineProps({ mudels: Object });
-
-const submit = () => {
-    form.post(route('ladu.store'))
-}
 
 </script>
 
@@ -37,24 +42,29 @@ const submit = () => {
         </template>
         
         <div class="w-full max-w-lg mt-10">
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
-                <!-- @submit.prevent="form.post(route('ladu.index'))" -->
+            <form @submit.prevent="form.post(route('sisestamine'))" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" >
+
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="SN">
-                        Serial number
-                    </label>
-                    <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="SN" type="text" placeholder="S/N" v-model="SN" required>
-                    <p class="text-red-500 text-xs italic">Kohustuslik.</p>
+                    <InputLabel class="mb-2" for="SN" value="Seeria number"/>
+
+                    <TextInput class="border-red-500 w-full py-2 px-3 leading-tight" 
+                        id="SN"
+                        type="text" 
+                        placeholder="S/N"
+                        v-model="form.SN" 
+                        required
+                        autofocus
+                    />
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="device">
-                        Seade
-                    </label>
+                    <InputLabel class="mb-2" for="device" value="Seade"/>
+                        
                     <select 
                         class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 mb-2 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" 
-                        v-model="form.device" 
+                        v-model="form.device_id" 
                         id="device"
+                        required
                         >
                     
                         <option v-for="device in devices" :value="device.id">{{ device.title }}</option> 
@@ -68,15 +78,15 @@ const submit = () => {
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="mudel">
-                        Mudel
-                    </label>
-                    <select 
+                    <InputLabel class="mb-2" for="mudel" value="Mudel"/>
+
+                    <select
                         class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 mb-2 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" 
-                        v-model="form.mudel"
+                        v-model="form.mudel_id"
                         id="mudel"
+                        required
                         >
-                        <option v-for="mudel in mudels" :value="mudel.id">{{ mudel.title }}</option>
+                        <option v-for="mudel in fMudels" :value="mudel.id">{{ mudel.title }}</option>
                     </select>
 
                     <Link  :href="route('mudel')" as="button" type="button" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -85,17 +95,20 @@ const submit = () => {
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
-                        Kirjeldus
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" type="text" placeholder="Kirjelda toodet">
+                    <InputLabel class="mb-2" for="description" value="Toote kirjeldus"/>
+
+                    <textarea class="w-full py-2 px-3" 
+                        id="description"
+                        placeholder="Kirjelda toodet"
+                        v-model="form.description"
+                        required
+                        ></textarea>
                 </div>
                 
-                <div class="inline-block relative w-64 mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="condition">
-                        Seisukord
-                    </label>
-                    <select id="condition" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <div class="w-full mb-4">
+                    <InputLabel class="mb-2" for="condition" value="Seisukord"/>
+
+                    <select v-model="form.condition" id="condition" required class="w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                         <option>Laos</option>
                         <option>Objektil</option>
                         <option>Parandada</option>
@@ -107,11 +120,10 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="inline-block relative w-64 mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="shelf">
-                        Riiul
-                    </label>
-                    <select id="shelf" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <div class="w-full mb-4">
+                    <InputLabel class="mb-2" for="shelf" value="Riiul"/>
+
+                    <select v-model="form.shelf" id="shelf" required class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -124,10 +136,9 @@ const submit = () => {
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="shop">
-                        Kauplus
-                    </label>
-                    <select id="shop" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                    <InputLabel class="block text-gray-700 text-sm font-bold mb-2" for="shop" value="Kauplus"/>
+                        
+                    <select v-model="form.shop" id="shop" required class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                         <optgroup label="Konsumid">
 						<option value="Kaubaait">Kaubaait</option>
 							<option value="Kummeli Konsum">Kummeli Konsum</option> 						
@@ -174,12 +185,13 @@ const submit = () => {
 
                 <input 
                     class="mb-5 mt-3"
-                    type="file" 
+                    required
+                    type="file"
                     @input="form.image = $event.target.files[0]"
                 />
 
                 <div class="flex items-center justify-around">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sisesta</button>   
+                    <button type="submit" :disabled="form.processing" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sisesta</button>   
                 </div>
 
             </form>

@@ -26,6 +26,9 @@ const form = useForm({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex flex-col">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                        <Link :href="route('sisestamine')" as="button" type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 mb-4 max-w-16 rounded focus:outline-none focus:shadow-outline">
+                            Tagasi
+                        </Link>
                         <form @submit.prevent="form.post(route('device'))" class="flex flex-col gap-2">
                             <div>
                                 <InputLabel for="name" value="New device" />
@@ -37,12 +40,12 @@ const form = useForm({
                                     v-model="form.title"
                                     required
                                     autofocus
-                                    />
+                                />
                                     <span class="text-red-600" v-if="form.errors.title">
                                         {{ form.errors.title }}
                                     </span>
                                     <!-- <InputError class="mt-2" :message="form.errors.title" /> -->
-                                </div>
+                            </div>
                                 
                             <button type="submit" :disabled="form.processing" class="w-full h-fit border border-gray-500 py-2">Create new device</button>
                         </form>

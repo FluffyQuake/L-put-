@@ -5,10 +5,8 @@ use App\Http\Controllers\LaduController;
 use App\Http\Controllers\MudelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SisestamineController;
-use App\Models\Ladu;
+use App\Models\Sisestamine;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -42,7 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
-    Route::resource('ladu', LaduController::class)->withTrashed()->except('update');
+    Route::resource('ladu', LaduController::class);
+    Route::get('/ladu', [LaduController::class, 'index'])->name('ladu');
     // Route::post('ladu/update/{ladu}', [LaduController::class, 'update'])->name('ladu.update');
     
     Route::post('/device', [DeviceController::class, 'store'])->name('device');
@@ -50,9 +49,13 @@ Route::middleware('auth')->group(function () {
     // Route::resource('device', DeviceController::class);
     // Route::get('/device/create', [DeviceController::class, 'create'])->name('device.create');
     
-    Route::post('sisestamine', [SisestamineController::class, 'store'])->name('sisestamine.store');
-    Route::resource('sisestamine', SisestamineController::class);
-    // $sisestamine = DB::table('mudel')->get()->dd();
+    Route::post('/sisestamine', [SisestamineController::class, 'store'])->name('sisestamine');
+    Route::get('/sisestamine', [SisestamineController::class, 'index'])->name('sisestamine');
+    Route::delete('/sisestamine', [SisestamineController::class, 'destroy'])->name('sisestamine.destroy');
+    Route::put('/sisestamine', [SisestamineController::class, 'update'])->name('sisestamine.update');
+
+    // Route::resource('sisestamine', SisestamineController::class);
+    // $sisestamine = DB::table('sisestamine')->get()->dd();
     
     Route::post('/mudel', [MudelController::class, 'store'])->name('mudel');
     Route::get('/mudel', [MudelController::class, 'index'])->name('mudel');
@@ -60,8 +63,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::post('/ladu-insert', [FormController::class, 'store']);
 
-Route::post('/sisestamine/create', [SisestamineController::class, 'store']);
+// Route::post('/sisestamine/create', [SisestamineController::class, 'store']);
 
 require __DIR__.'/auth.php';

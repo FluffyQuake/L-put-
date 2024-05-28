@@ -14,7 +14,6 @@ return new class extends Migration
     {
         Schema::create('device', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Mudel::class);
             $table->string('title');
             $table->timestamps();
         });
