@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\Mudel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,12 +14,12 @@ class MudelController extends Controller
     {
         return Inertia::render('Mudel/Index', [
             'mudel' => Mudel::all(),
+            'devices' => Device::all(),
         ]);
     }
 
     public function create() {
         return Inertia::render('Mudel/Create', [
-
         ]);
     }
 
@@ -29,11 +30,15 @@ class MudelController extends Controller
     
         $title = $request->input('title');
 
-        Mudel::create(
-            $request->all()
-        );
+        // Mudel::create([
+        //     'title' => $request['title'],
+        // ]);
+        Mudel::create([
+            'title' => $request['title'],
+            'device_id' => $request['device_id']
+        ]);
 
-        return redirect()->route('sisestamine.index');
+        return redirect()->route('sisestamine');
 
     }
 }

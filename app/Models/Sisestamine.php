@@ -7,16 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sisestamine extends Model
 {
-    public $table = 'sisestamine';
     use HasFactory;
+    protected $guarded = [];
+    public $table = 'sisestamine';
 
-    protected $fillable= [
-        'SN',
-        'seade',
-        'mudel',
-        'kirjeldus',
-        'seisukord',
-        'riiul',
-        'kauplus',
-    ];
+    public function device()
+    {
+        return $this->belongsTo(Device::class);
+    }
+
+    public function mudel()
+    {
+        return $this->belongsTo(Mudel::class);
+    }
+
+    // protected $fillable= [
+    //     'SN',
+    //     'device',
+    //     'mudel',
+    //     'description',
+    //     'condition',
+    //     'shelf',
+    //     'shop',
+    //     'image'
+    // ];
 }

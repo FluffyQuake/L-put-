@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "@tanstack/vue-table": "^8.15.3",
-        "i": "^0.3.7"
+        "i": "^0.3.7",
+        "primevue": "^3.52.0"
     }
 }

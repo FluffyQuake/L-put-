@@ -44,12 +44,11 @@ class DeviceController extends Controller
         $title = $request->input('title');
         
         // dd($title);
-        Device::create(
-            // 'title' => $title,
-            $request->all()
-        );
+        Device::create([
+            'title' => $request['title'],
+        ]);
         
-        return redirect()->route('sisestamine.index');
+        return redirect()->route('sisestamine');
     }
 
 }

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ladu extends Model
 
 {
-    public $table = 'ladu';
-    protected $guarded = [];
     use HasFactory;
+    protected $guarded = [];
+    public $table = 'ladu';
 }
