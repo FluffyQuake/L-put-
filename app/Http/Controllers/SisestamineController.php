@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\Ladu;
+use App\Models\Mudel;
 use App\Models\Sisestamine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use League\CommonMark\Node\Block\Document;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class SisestamineController extends Controller  
@@ -16,8 +20,11 @@ class SisestamineController extends Controller
      */
     public function index()
     {
+        // dd(Mudel::get());
         return Inertia::render('Sisestamine/Index', [
             'sisestamine' => Sisestamine::all(),
+            'devices' => Device::get(),
+            'mudels' => Mudel::get(),
         ]);
     }
 
@@ -26,7 +33,9 @@ class SisestamineController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Sisestamine/Create', [
+
+        ]);
     }
 
     /**
@@ -34,6 +43,50 @@ class SisestamineController extends Controller
      */
     public function store(Request $request)
     {
+        Validator::make($request->all(), [
+            'SN' => 'required|max:25',
+            'device_id' => 'required',
+            'mudel_id' => 'required',
+            'description' => 'required',
+            'condition' => 'required',
+            'shelf' => 'required',
+            'shop' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
+        ])->validate();
+        
+        $SN = $request->input('SN');
+        $device = $request->input('device_id');
+        $mudel = $request->input('mudel_id');
+        $description = $request->input('description');
+        $condition = $request->input('condition');
+        $shelf = $request->input('shelf');
+        $shop = $request->input('shop');
+        $image = Storage::putFile('public/sisestamine', $request->file('image'));
+        $image = str_replace('public/sisestamine', 'sisestamine', $image);
+        
+        // dd($SN);
+        // dd($device);
+        // dd($mudel);
+        // dd($description);
+        // dd($condition);
+        // dd($shelf);
+        // dd($shop);
+        // dd($image);
+
+        Sisestamine::create([
+            'SN' => $SN,
+            'device_id' => $device,
+            'mudel_id' => $mudel,
+            'description' => $description,
+            'condition' => $condition,
+            'shelf' => $shelf,
+            'shop' => $shop,
+            'image_path' => $image,
+            // $request->all()
+        ]);
+
+        return redirect()->route('ladu');
+
     }
 
     /**
@@ -49,10 +102,10 @@ class SisestamineController extends Controller
      */
     public function edit(Sisestamine $sisestamine)
     {
-        return Inertia::render('ladu.edit', [
-            'sisestamine' => $sisestamine,
-            'ladu' => Ladu::all()
-        ]);
+        // return Inertia::render('ladu.edit', [
+        //     'sisestamine' => $sisestamine,
+        //     'ladu' => Ladu::all()
+        // ]);
     }
 
     /**
@@ -62,8 +115,8 @@ class SisestamineController extends Controller
     {
         $request->validate([
             'SN' => 'required',
-            'device' => 'required',
-            'mudel' => 'required',
+            'device_id' => 'required',
+            'mudel_id' => 'required',
             'description' => 'required',
             'condition' => 'required',
             'shelf' => 'required',
@@ -76,8 +129,8 @@ class SisestamineController extends Controller
 
         $sisestamine->update([
             'SN' => $request['SN'],
-            'device' => $request['device'],
-            'mudel' => $request['mudel'],
+            'device_id' => $request['device_id'],
+            'mudel_id' => $request['mudel_id'],
             'description' => $request['description'],
             'condition' => $request['condition'],
             'shelf' => $request['shelf'],
@@ -85,17 +138,16 @@ class SisestamineController extends Controller
             'image_path' => $path,
         ]);
 
-    return redirect()->route('ladu.index');   
+    return redirect()->route('ladu');
     }
 
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sisestamine $sisestamine)
+    public function destroy(Request $request)
     {
-        Storage::delete($sisestamine->image_path);
-        $sisestamine->delete();
-        return redirect()->route('ladu.index');
+        Sisestamine::find($request['id'])->delete();
+
     }
 }
